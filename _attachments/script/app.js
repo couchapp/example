@@ -31,14 +31,13 @@ $(function() {
         loggedIn : function(r) {
             $("#profile").couchProfile(r, {
                 profileReady : function(profile) {
-                    $("#create-message").couchForm({
-                        beforeSave : function(doc) {
+                    $("#create-message").submit(function(){
+                        var form = this, doc = {};
                             doc.created_at = new Date();
-                            doc.profile = profile;                         
-                            return doc;
-                        }
-                    });
-                    $("#create-message").find("input").focus();
+                            doc.profile = profile;
+                        db.saveDoc(doc, {success : function() {form.reset();}});
+                        return false;
+                    }).find("input").focus();
                 }
             });
         },
